@@ -3,24 +3,22 @@
     <h1>Input form</h1>
     <div>
       <form @submit.prevent="handleSubmit()">
-        <v-text-field
-          type="text"
-          label="Name"
-          v-model="name"
-          required
-        ></v-text-field>
-        <v-text-field
-          type="text"
-          label="Email"
-          v-model="email"
-          required
-        ></v-text-field>
-        <v-text-field
-          type="password"
-          label="Password"
-          v-model="password"
-          required
-        ></v-text-field>
+        <p>
+          <v-text-field
+            type="text"
+            label="Email"
+            v-model="email"
+            required
+          ></v-text-field>
+        </p>
+        <p>
+          <v-text-field
+            type="password"
+            label="Password"
+            v-model="password"
+            required
+          ></v-text-field>
+        </p>
         <div class="btn_div">
           <v-btn
             class="submit_btn"
@@ -36,59 +34,46 @@
             "
           >
             Submit
+            <div class="loader" > <v-progress-circular v-if="loading" indeterminate color="white" ></v-progress-circular></div>
           </v-btn>
+        </div>
+        <div>
+          Not registered <router-link to="/signup">Sign up</router-link>
         </div>
       </form>
     </div>
   </div>
 </template>
 <script>
-import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
-import {reactive,computed} from 'vue'
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 export default {
   name: "LoginComp",
- setup(){
-    const state=reactive({
-        name:"",
-        email:"",
-        password:"",
-    })
- },
-
- rules : computed(()=>{
-   return {
-      name: { required },
-  email: { required },
-  password: { required }
-   }
-}),
-  data(){
-    return{
-        v$:useVuelidate(),
-        name:"",
-        email:"",
-        password:"",
-    }
+  data() {
+    return {
+      email: "",
+      password: "",
+      loading:false,
+    };
   },
 
-  methods:{
-    handleSubmit(){
-      console.log(this.name+ this.email + this.password);
-    console.log(this.v$);
-    this.v$.$validate()
-    if(!this.v$.$error){
-        alert("Form submitted successfully");
-    }else{
-        alert("Form failed validation");
-    }
-    
-    }
-  }
+  methods: {
+    async handleSubmit() {
+      try {
+        this.loading = true; 
+        await signInWithEmailAndPassword(auth, this.email, this.password);
+        this.$router.push("/homepage");
+      } catch (error) {
+        console.error("Authentication failed:", error.message);
+      } finally {
+        this.loading = false; 
+      }
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .main_div {
   min-width: 300px;
   width: 45%;
@@ -106,5 +91,9 @@ h1 {
 .btn_div {
   display: flex;
   justify-content: center;
+  position: relative;
+}
+.loader{
+  position: absolute;
 }
 </style>
