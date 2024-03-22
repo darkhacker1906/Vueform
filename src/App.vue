@@ -1,16 +1,10 @@
 <template>
-<login-comp-vue/>
-  
+<router-view></router-view>
 </template>
 
 <script>
-import LoginCompVue from './components/LoginComp.vue'
 export default {
   name:"App",
-  components:{
-    LoginCompVue,
-  }
-
 }
 </script>
 
