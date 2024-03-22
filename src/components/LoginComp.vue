@@ -1,6 +1,8 @@
 <template>
   <div class="main_div">
     <h1>Input form</h1>
+       <!-- <p>{{$store.state.name}}</p> -->
+       <!-- <button @click="handleClick">Change name</button> -->
     <div>
       <form @submit.prevent="handleSubmit()">
         <p>
@@ -37,7 +39,7 @@
             <div class="loader" > <v-progress-circular v-if="loading" indeterminate color="white" ></v-progress-circular></div>
           </v-btn>
         </div>
-        <div>
+        <div class="m_b">
           Not registered <router-link to="/signup">Sign up</router-link>
         </div>
       </form>
@@ -69,6 +71,14 @@ export default {
         this.loading = false; 
       }
     },
+    handleClick(){
+      // this.$store.commit('setNewName','Abhinandan@123')
+      // this.$store.state.name="Hello Everyone"
+      //Action--------------------
+      this.$store.dispatch({
+        type:'newName', name:"New again database"
+      })
+    }
   },
 };
 </script>
@@ -95,5 +105,8 @@ h1 {
 }
 .loader{
   position: absolute;
+}
+.m_b{
+  margin-top:10px;
 }
 </style>
