@@ -1,6 +1,7 @@
 <template>
   <div class="main_div">
     <h1>Signup</h1>
+ 
     <div>
       <form @submit.prevent="handleSubmit()">
         <p>
